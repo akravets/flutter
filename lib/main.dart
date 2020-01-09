@@ -52,6 +52,7 @@ class _WebViewContainerState extends State<WebViewContainer> {
     platform.setMethodCallHandler((MethodCall call) async {
       print("Call.method: " + call.method);
       print("Call.args: " + call.arguments);
+      _controller.loa
     });
     /*
     print("in getSharedText()");
