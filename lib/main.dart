@@ -34,7 +34,6 @@ class _WebViewContainerState extends State<WebViewContainer> {
     print("_WebViewContainerState");
   }
   static const platform = const MethodChannel('app.channel.shared.data');
-  
   //String dataShared = "No data";
   WebViewController _controller;
 
@@ -42,26 +41,16 @@ class _WebViewContainerState extends State<WebViewContainer> {
   void initState() {
     super.initState();
     print("initState");
-    platform.setMethodCallHandler((MethodCall call) async {
-      print("Call.method: " + call.method);
-      print("Call.args: " + call.arguments);
-    });
+    getSharedText();
   }
 
   getSharedText() async {
-    platform.setMethodCallHandler((MethodCall call) async {
-      print("Call.method: " + call.method);
-      print("Call.args: " + call.arguments);
-      _controller.loa
-    });
-    /*
     print("in getSharedText()");
     var sharedData = await platform.invokeMethod("getSharedText");
     if (sharedData != null && _controller != null) {
       print("sharedData");
       _controller.loadUrl(Uri.parse(sharedData).toString());
     }
-    */
   }
 
   @override
