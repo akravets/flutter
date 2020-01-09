@@ -29,6 +29,8 @@ public class MainActivity extends FlutterActivity {
     String action = intent.getAction();
     String type = intent.getType();
 
+    handleSendText(intent); // Handle text being sent
+
     if (Intent.ACTION_SEND.equals(action) && type != null) {
       if ("text/plain".equals(type)) {
         handleSendText(intent); // Handle text being sent

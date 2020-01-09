@@ -1,5 +1,5 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 void main() {
@@ -15,35 +15,69 @@ class SampleApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyWebView(title: "Test", selectedUrl: "http://www.google.com"),
+      home: WebViewContainer(),
     );
   }
 }
 
-class MyWebView extends StatelessWidget {
-  final String title;
-  final String selectedUrl;
+class WebViewContainer extends StatefulWidget {
+  @override
+  createState() => _WebViewContainerState();
 
-  final Completer<WebViewController> _controller =
-      Completer<WebViewController>();
-      
-  MyWebView({
-    @required this.title,
-    @required this.selectedUrl,
-  });
+  WebViewContainer() {
+    print("WebViewContainer");
+  }
+}
+
+class _WebViewContainerState extends State<WebViewContainer> {
+  _WebViewContainerState(){
+    print("_WebViewContainerState");
+  }
+  static const platform = const MethodChannel('app.channel.shared.data');
+  
+  //String dataShared = "No data";
+  WebViewController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    print("initState");
+    platform.setMethodCallHandler((MethodCall call) async {
+      print("Call.method: " + call.method);
+      print("Call.args: " + call.arguments);
+    });
+  }
+
+  getSharedText() async {
+    platform.setMethodCallHandler((MethodCall call) async {
+      print("Call.method: " + call.method);
+      print("Call.args: " + call.arguments);
+    });
+    /*
+    print("in getSharedText()");
+    var sharedData = await platform.invokeMethod("getSharedText");
+    if (sharedData != null && _controller != null) {
+      print("sharedData");
+      _controller.loadUrl(Uri.parse(sharedData).toString());
+    }
+    */
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(title),
-        ),
-        body: WebView(
-          initialUrl: selectedUrl,
-          javascriptMode: JavascriptMode.unrestricted,
-          onWebViewCreated: (WebViewController webViewController) {
-            _controller.complete(webViewController);
-          },
+        appBar: AppBar(),
+        body: Column(
+          children: [
+            Expanded(
+                child: WebView(
+              initialUrl: 'about:blank',
+              javascriptMode: JavascriptMode.unrestricted,
+              onWebViewCreated: (WebViewController webViewController) {
+                _controller = webViewController;
+              },
+            ))
+          ],
         ));
   }
 }
