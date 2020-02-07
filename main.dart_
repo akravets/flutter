@@ -1,0 +1,49 @@
+...
+
+class WebViewContainer extends StatefulWidget {
+  @override
+  createState() => _WebViewContainerState();
+}
+
+class _WebViewContainerState extends State<WebViewContainer>
+    with WidgetsBindingObserver {
+  static const platform =
+      const MethodChannel('com.iwaysoftware.webFocusMobile/report');
+
+  String _fileName = "";
+
+  FlutterWebviewPlugin flutterWebviewPlugin = FlutterWebviewPlugin();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    getSharedText();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      getSharedText();
+    }
+  }
+
+  getSharedText() async {
+    var file = await platform.invokeMethod("getReportFile");
+
+    if (file != null) {
+      log("reloading");
+      flutterWebviewPlugin.reloadUrl('file://${file.path}');
+    }
+  }
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    return WebviewScaffold(
+        url: 'about:blank',
+        withJavascript: true,
+        appBar: AppBar(title: Text("$_fileName")));
+  }
+}
