@@ -39,9 +39,9 @@ class _WebViewContainerState extends State<WebViewContainer> with WidgetsBinding
 	
 	@override
 	void initState() {
+		super.initState();
 		if(_fileName == ""){
 			writeLog('@@@@@@@@@CHECK1', "INIT_STATE: fileName is null");
-			super.initState();
 			WidgetsBinding.instance.addObserver(this);
 
 			writeLog("initState()", "Initializing...");
